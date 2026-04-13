@@ -13,17 +13,17 @@ Deploy Free5GC on a single Kubernetes cluster across multiple nodes.
 | free5gc-up (User Plane) | 4 vCPU | 8 GB | 40 GB |
 | free5gc-an (Access Network) | 4 vCPU | 8 GB | 40 GB |
 
-| Network Interface | CNI and Multus Interface | IP Pool |
-|---|---|---|
-| NIC1(ens18) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.0.0/24) |
-| NIC2(ens19) | N2, N3, N4 | 10.100.50.0/24 |
-
 | Node | Deploy | NIC1(ens18) | NIC2(ens19) |
 |---|---|---|---|
 | free5gc-master | Kubernetes master node | Assigned IP | — |
 | free5gc-cp | Control Plane NFs | Assigned IP | 10.100.50.11 |
 | free5gc-up | UPF | Assigned IP | 10.100.50.21 |
 | free5gc-an | gNB and UE | Assigned IP | 10.100.50.31 |
+
+| Network Interface | CNI and Multus Interface | IP Pool |
+|---|---|---|
+| NIC1(ens18) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.0.0/24) |
+| NIC2(ens19) | N2, N3, N4 | 10.100.50.0/24 |
 
 ---
 

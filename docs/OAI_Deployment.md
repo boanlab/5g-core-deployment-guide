@@ -22,8 +22,8 @@ Deploy OAI 5G Core on a single Kubernetes cluster across multiple nodes.
 
 | Network Interface | CNI and Multus Interface | IP Pool |
 |---|---|---|
-| NIC1(ens18) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.0.0/24) |
-| NIC2(ens19) | N2, N3, N4 | 10.100.50.0/24 |
+| NIC1(ens3) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.10.0/16) |
+| NIC2(ens8) | N2, N3, N4 | 10.100.50.0/24 |
 
 ---
 
@@ -606,7 +606,7 @@ oai-amf:
       - name: "n2"
         type: ipvlan
         mode: l2
-        hostInterface: "ens19"
+        hostInterface: "ens8"
         ipAdd: "10.100.50.249"
         netmask: "29"
         routes: ""
@@ -640,23 +640,23 @@ oai-upf:
       - name: "n3"
         type: ipvlan
         mode: l2
-        hostInterface: "ens19"
+        hostInterface: "ens8"
         ipAdd: "10.100.50.233"
         netmask: "29"
         enabled: true
       - name: "n4"
         type: ipvlan
         mode: l2
-        hostInterface: "ens19"
+        hostInterface: "ens8"
         ipAdd: "10.100.50.241"
         netmask: "29"
         enabled: true
       - name: "n6"
         type: ipvlan
         mode: l2
-        hostInterface: "ens18"
-        ipAdd: "10.10.0.105"
-        netmask: "24"
+        hostInterface: "ens3"
+        ipAdd: "10.10.10.105"
+        netmask: "16"
         enabled: true
       - name: "n9"
         hostInterface: "eth0"
@@ -726,7 +726,7 @@ oai-smf:
       - name: "smfn4"
         type: ipvlan
         mode: l2
-        hostInterface: "ens19"
+        hostInterface: "ens8"
         ipAdd: "10.100.50.244"
         netmask: "29"
         enabled: true
@@ -1061,14 +1061,14 @@ multus:
   enabled: true
   interfaces:
     - name: "n2"
-      hostInterface: "ens19"
+      hostInterface: "ens8"
       ipAdd: "10.100.50.250"
       netmask: "29"
       enabled: true
       type: ipvlan
       mode: "l2"
     - name: "n3"
-      hostInterface: "ens19"
+      hostInterface: "ens8"
       ipAdd: "10.100.50.234"
       netmask: "29"
       enabled: true
@@ -1390,7 +1390,7 @@ global:
     name: n2network
     type: ipvlan
     mode: l2
-    masterIf: ens19
+    masterIf: ens8
     subnetIP: 10.100.50.248
     cidr: 29
     gatewayIP: ""
@@ -1399,7 +1399,7 @@ global:
     name: n3network
     type: ipvlan
     mode: l2
-    masterIf: ens19
+    masterIf: ens8
     subnetIP: 10.100.50.232
     cidr: 29
     gatewayIP: ""

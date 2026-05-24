@@ -385,36 +385,6 @@ kubectl logs -n up <iupf1-pod-name>
 
 ![figure16](../assets/free5gc/figure16.png)
 
-```bash
-# Run on: free5gc-up
-# Troubleshooting for sysctl: allow net.ipv4.ip_forward on the UPF node's kubelet
-
-# Check current state (should be empty if not yet configured)
-sudo grep -n -i "allowedUnsafeSysctls\|sysctl" /var/lib/kubelet/config.yaml
-
-# Append the allowlist entry
-echo 'allowedUnsafeSysctls:
-  - "net.ipv4.ip_forward"' | sudo tee -a /var/lib/kubelet/config.yaml
-
-# Verify it was added
-tail -5 /var/lib/kubelet/config.yaml
-
-# Restart kubelet (persists across reboots since it is in config.yaml)
-sudo systemctl restart kubelet
-sudo systemctl status kubelet | grep Active
-```
-
-```bash
-# Run on: free5gc-master
-# Redeploy UPF so the new pods pass admission and stale pods are cleaned up
-helm uninstall userplane -n up
-
-cd ~/free5gc-helm/charts/free5gc/charts
-# (Step 9의 helm install userplane 명령 그대로 다시 실행)
-
-kubectl get pods -n up
-```
-
 ### (10) Deploy Control Plane NFs
 
 ```bash

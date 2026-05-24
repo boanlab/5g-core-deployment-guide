@@ -342,7 +342,7 @@ grep -A2 "nodeSelector" free5gc-upf/values.yaml
 
 # Pin gNB and UE (UERANSIM) to free5gc-an node
 cd ~/free5gc-helm/charts/ueransim
-sed -i 's/nodeSelector: {}/nodeSelector:\n  kubernetes.io\/hostname: free5gc-an/' \
+sed -i 's/nodeSelector: {}/nodeSelector:\n    kubernetes.io\/hostname: free5gc-an/' \
   values.yaml
 
 grep -A2 "nodeSelector" values.yaml

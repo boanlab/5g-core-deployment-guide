@@ -320,7 +320,7 @@ spec:
 # Run on: free5gc-master
 
 cd ~
-git clone https://github.com/free5gc/free5gc-helm.git
+git clone -b v4.2.0 https://github.com/free5gc/free5gc-helm.git
 
 cd ~/free5gc-helm/charts/free5gc/charts
 

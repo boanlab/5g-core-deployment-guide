@@ -473,6 +473,25 @@ ping -I uesimtun0 8.8.8.8
 
 ![figure27](../assets/free5gc/figure27.png)
 
+### UE Has No External Connectivity — UPF Egress Not Routed via N6
+
+```bash
+# Inside the UPF pod
+
+# Create the routing table file (directory is missing in the minimal image)
+mkdir -p /etc/iproute2
+echo "200 n6rt" >> /etc/iproute2/rt_tables
+
+# Route UE-subnet traffic out via the N6 gateway
+ip route add default via 10.10.0.1 dev n6 table n6rt
+ip rule add from 10.1.0.0/17 lookup n6rt priority 100
+ip rule add from 10.1.128.0/17 lookup n6rt priority 100
+
+# Masquerade UE traffic leaving N6 (skip if a MASQUERADE rule already exists)
+iptables -t nat -A POSTROUTING -s 10.1.0.0/17 -o n6 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.1.128.0/17 -o n6 -j MASQUERADE
+```
+
 ---
 
 ## 3. Troubleshooting

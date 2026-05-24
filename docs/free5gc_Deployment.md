@@ -13,7 +13,7 @@ Deploy Free5GC on a single Kubernetes cluster across multiple nodes.
 | free5gc-up (User Plane) | 4 vCPU | 8 GB | 40 GB |
 | free5gc-an (Access Network) | 4 vCPU | 8 GB | 40 GB |
 
-| Node | Deploy | NIC1(ens18) | NIC2(ens19) |
+| Node | Deploy | NIC1(ens3) | NIC2(ens8) |
 |---|---|---|---|
 | free5gc-master | Kubernetes master node | Assigned IP | — |
 | free5gc-cp | Control Plane NFs | Assigned IP | 10.100.50.11 |
@@ -22,8 +22,8 @@ Deploy Free5GC on a single Kubernetes cluster across multiple nodes.
 
 | Network Interface | CNI and Multus Interface | IP Pool |
 |---|---|---|
-| NIC1(ens18) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.0.0/24) |
-| NIC2(ens19) | N2, N3, N4 | 10.100.50.0/24 |
+| NIC1(ens3) | Cilium, N6 | NIC1 IP Pool(In this case 10.10.10.0/16) |
+| NIC2(ens8) | N2, N3, N4 | 10.100.50.0/24 |
 
 ---
 
@@ -362,16 +362,16 @@ grep -A2 "nodeSelector" values.yaml
 cd ~/free5gc-helm/charts/free5gc/charts
 
 helm install userplane -n up \
-  --set global.n3network.masterIf=ens19 \
-  --set global.n4network.masterIf=ens19 \
-  --set global.n9network.masterIf=ens19 \
-  --set global.n6network.masterIf=ens18 \
+  --set global.n3network.masterIf=ens8 \
+  --set global.n4network.masterIf=ens8 \
+  --set global.n9network.masterIf=ens8 \
+  --set global.n6network.masterIf=ens3 \
   --set global.n6network.subnetIP="10.10.0.0" \
-  --set global.n6network.cidr=24 \
+  --set global.n6network.cidr=16 \
   --set global.n6network.gatewayIP="10.10.0.1" \
-  --set iupf1.n6if.ipAddress="10.10.0.105" \
-  --set psaupf1.n6if.ipAddress="10.10.0.106" \
-  --set psaupf2.n6if.ipAddress="10.10.0.107" \
+  --set iupf1.n6if.ipAddress="10.10.10.105" \
+  --set psaupf1.n6if.ipAddress="10.10.10.106" \
+  --set psaupf2.n6if.ipAddress="10.10.10.107" \
   free5gc-upf
 
 # Verify UPF pods are running and check logs
@@ -397,9 +397,9 @@ sed -i 's/deployUpf: true/deployUpf: false/' values.yaml
 sed -i 's/deployDbPython: true/deployDbPython: false/' values.yaml
 
 helm install controlplane -n cp \
-  --set global.n2network.masterIf=ens19 \
-  --set global.n3network.masterIf=ens19 \
-  --set global.n4network.masterIf=ens19 \
+  --set global.n2network.masterIf=ens8 \
+  --set global.n3network.masterIf=ens8 \
+  --set global.n4network.masterIf=ens8 \
   .
 
 # Verify all Control Plane pods are running and check AMF/SMF logs
@@ -439,8 +439,8 @@ http://<free5gc-cp-node-ip>:30500
 cd ~/free5gc-helm/charts/ueransim
 
 helm install ueransim -n an \
-  --set global.n2network.masterIf=ens19 \
-  --set global.n3network.masterIf=ens19 \
+  --set global.n2network.masterIf=ens8 \
+  --set global.n3network.masterIf=ens8 \
   .
 
 # Verify pods are running and check UE logs
